@@ -1,6 +1,7 @@
 import sys
 sys.path.append("..")
 from lib import *
+
 trainsize = 256
 class DataTransform():
     def __init__(self, input_size, color_mean, color_std):
@@ -23,7 +24,7 @@ class DataTransform():
         }
     
     def __call__(self, phase, img, anno_class_img):
-        return self.data_transform[phase](img, anno_class_img)
+        return self.data_transform[phase](image=img, mask=anno_class_img)
 
 
 class CarSegmentationDataset(Dataset):
@@ -37,8 +38,8 @@ class CarSegmentationDataset(Dataset):
             self.images = images
             self.masks = masks
         else:
-            self.images = sorted(os.listdir(image_dir))  # Sắp xếp lại ảnh theo thứ tự
-            self.masks = sorted(os.listdir(mask_dir))    # Sắp xếp lại mặt nạ theo thứ tự
+            self.images = sorted(os.listdir(image_dir))  
+            self.masks = sorted(os.listdir(mask_dir))   
 
     def __len__(self):
         return len(self.images)
@@ -63,7 +64,7 @@ class CarSegmentationDataset(Dataset):
             raise ValueError("Height and Width of image and mask should be equal.")
 
         if self.transform:
-            transformed = self.transform(image=image, mask=mask)
+            transformed = self.transform(self.phase, img=image, anno_class_img=mask)
             image = transformed['image']
             mask = transformed['mask']
         return image, mask
