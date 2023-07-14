@@ -1,2 +1,3 @@
-# seg-n-detect
-EZ way to do segmentation and object detection with sm_model + YOLO
+# full-body-segmentation
+
+EZ way to do segmentation full body with segmentation_models 
